@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Joystick joystick = new Joystick(0);
-  private DoubleSolenoid piston = new DoubleSolenoid(0, 1);
+
 
   private RobotContainer m_robotContainer;
 
@@ -98,15 +98,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-
-
-
-    if (joystick.getRawButton(0)) {
-      piston.set(Value.kForward);
-    } else {
-      piston.set(Value.kReverse);
-    }
-  }
+}
 
   @Override
   public void testInit() {
