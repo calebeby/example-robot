@@ -7,10 +7,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -28,6 +30,7 @@ public class Robot extends TimedRobot {
   private SpeedController rightMotor = new Spark(1);
 
   private DifferentialDrive drivetrain = new DifferentialDrive(leftMotor, rightMotor);
+  private DoubleSolenoid piston = new DoubleSolenoid(0, 1);
 
   private RobotContainer m_robotContainer;
 
@@ -108,6 +111,12 @@ public class Robot extends TimedRobot {
     double forwardSpeed = joystick.getRawAxis(0);
     double rotationSpeed = joystick.getRawAxis(1);
     drivetrain.arcadeDrive(forwardSpeed, rotationSpeed);
+
+    if (joystick.getRawButton(0)) {
+      piston.set(Value.kForward);
+    } else {
+      piston.set(Value.kReverse);
+    }
   }
 
   @Override
