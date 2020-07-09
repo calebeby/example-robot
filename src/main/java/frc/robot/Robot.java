@@ -26,10 +26,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Joystick joystick = new Joystick(0);
-  private SpeedController leftMotor = new Spark(0);
-  private SpeedController rightMotor = new Spark(1);
-
-  private DifferentialDrive drivetrain = new DifferentialDrive(leftMotor, rightMotor);
   private DoubleSolenoid piston = new DoubleSolenoid(0, 1);
 
   private RobotContainer m_robotContainer;
@@ -77,12 +73,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
   }
 
   /**
@@ -108,9 +98,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    double forwardSpeed = joystick.getRawAxis(0);
-    double rotationSpeed = joystick.getRawAxis(1);
-    drivetrain.arcadeDrive(forwardSpeed, rotationSpeed);
+
+
 
     if (joystick.getRawButton(0)) {
       piston.set(Value.kForward);
