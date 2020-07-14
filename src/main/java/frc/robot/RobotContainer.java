@@ -10,11 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.EjectHatchCommand;
 import frc.robot.commands.HoldHatchCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.JoystickElevatorCommand;
+import frc.robot.subsystems.BallIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.HatchIntake;
@@ -31,6 +34,7 @@ public class RobotContainer {
   Drivetrain drivetrain = new Drivetrain();
   Elevator elevator = new Elevator();
   HatchIntake hatchIntake = new HatchIntake();
+  BallIntake ballIntake = new BallIntake();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -42,6 +46,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new JoystickDriveCommand(drivetrain, joystick));
     elevator.setDefaultCommand(new JoystickElevatorCommand(elevator, joystick));
     hatchIntake.setDefaultCommand(new HoldHatchCommand(hatchIntake));
+    ballIntake.setDefaultCommand(new RunCommand(ballIntake::stop, ballIntake));
   }
 
   /**
@@ -52,7 +57,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     JoystickButton intakeHatchButton = new JoystickButton(joystick, 0);
-    JoystickButton ejectHatchButon = new JoystickButton(joystick, 1);
+    JoystickButton ejectHatchButton = new JoystickButton(joystick, 1);
+    JoystickButton intakeBallButton = new JoystickButton(joystick, 2);
+    JoystickButton ejectBallButton = new JoystickButton(joystick, 3);
 
     intakeHatchButton.whileHeld(
       () -> {
@@ -61,6 +68,9 @@ public class RobotContainer {
       },
       hatchIntake
     );
-    ejectHatchButon.whileHeld(new EjectHatchCommand(hatchIntake).perpetually());
+    ejectHatchButton.whileHeld(new EjectHatchCommand(hatchIntake).perpetually());
+    
+    intakeBallButton.whileHeld(ballIntake::intake, ballIntake);
+    ejectBallButton.whileHeld(ballIntake::outtake, ballIntake);
   }
 }
