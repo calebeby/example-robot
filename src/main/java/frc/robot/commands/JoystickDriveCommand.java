@@ -16,8 +16,8 @@ public class JoystickDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double forwardSpeed = joystick.getRawAxis(0);
-        double rotationSpeed = joystick.getRawAxis(1);
+        double forwardSpeed = joystick.getY();
+        double rotationSpeed = joystick.getX();
         drivetrain.arcadeDrive(forwardSpeed, rotationSpeed);
     }
 }

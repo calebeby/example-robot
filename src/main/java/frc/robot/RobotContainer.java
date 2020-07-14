@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.JoystickDriveCommand;
+import frc.robot.commands.JoystickElevatorCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Elevator;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,7 +25,10 @@ public class RobotContainer {
   Joystick joystick = new Joystick(0);
   // The robot's subsystems and commands are defined here...
   Drivetrain drivetrain = new Drivetrain();
+  Elevator elevator = new Elevator();
+
   JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand(drivetrain, joystick);
+  JoystickElevatorCommand joystickElevatorCommand = new JoystickElevatorCommand(elevator, joystick);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -33,6 +38,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drivetrain.setDefaultCommand(joystickDriveCommand);
+    elevator.setDefaultCommand(joystickElevatorCommand);
   }
 
   /**
