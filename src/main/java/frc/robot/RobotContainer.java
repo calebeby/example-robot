@@ -10,10 +10,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.EjectHatchCommand;
+import frc.robot.commands.HoldHatchCommand;
 import frc.robot.commands.JoystickDriveCommand;
 import frc.robot.commands.JoystickElevatorCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.HatchIntake;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -26,9 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   Drivetrain drivetrain = new Drivetrain();
   Elevator elevator = new Elevator();
-
-  JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand(drivetrain, joystick);
-  JoystickElevatorCommand joystickElevatorCommand = new JoystickElevatorCommand(elevator, joystick);
+  HatchIntake hatchIntake = new HatchIntake();
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -37,8 +39,9 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    drivetrain.setDefaultCommand(joystickDriveCommand);
-    elevator.setDefaultCommand(joystickElevatorCommand);
+    drivetrain.setDefaultCommand(new JoystickDriveCommand(drivetrain, joystick));
+    elevator.setDefaultCommand(new JoystickElevatorCommand(elevator, joystick));
+    hatchIntake.setDefaultCommand(new HoldHatchCommand(hatchIntake));
   }
 
   /**
@@ -48,5 +51,16 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    JoystickButton intakeHatchButton = new JoystickButton(joystick, 0);
+    JoystickButton ejectHatchButon = new JoystickButton(joystick, 1);
+
+    intakeHatchButton.whileHeld(
+      () -> {
+        hatchIntake.openGrabber();
+        hatchIntake.retractEjectors();
+      },
+      hatchIntake
+    );
+    ejectHatchButon.whileHeld(new EjectHatchCommand(hatchIntake).perpetually());
   }
 }

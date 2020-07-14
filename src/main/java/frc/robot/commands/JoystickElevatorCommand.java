@@ -9,6 +9,7 @@ public class JoystickElevatorCommand extends CommandBase {
 	private Joystick joystick;
 
     public JoystickElevatorCommand(Elevator elevator, Joystick joystick) {
+        addRequirements(elevator);
         this.elevator = elevator;
 		this.joystick = joystick;
     }
