@@ -1,23 +1,25 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 public class JoystickDriveCommand extends CommandBase {
     private Drivetrain drivetrain;
-    private Joystick joystick;
+    private DoubleSupplier rotationSpeed;
+    private DoubleSupplier forwardSpeed;
 
-    public JoystickDriveCommand(Drivetrain drivetrain, Joystick joystick) {
-        addRequirements(drivetrain);
-        this.joystick = joystick;
+    public JoystickDriveCommand(Drivetrain drivetrain, DoubleSupplier rotationSpeed, DoubleSupplier forwardSpeed) {
+        this.rotationSpeed = rotationSpeed;
+        this.forwardSpeed = forwardSpeed;
         this.drivetrain = drivetrain;
+
+        addRequirements(drivetrain);
     }
 
     @Override
     public void execute() {
-        double forwardSpeed = joystick.getY();
-        double rotationSpeed = joystick.getX();
-        drivetrain.arcadeDrive(forwardSpeed, rotationSpeed);
+        drivetrain.arcadeDrive(forwardSpeed.getAsDouble(), rotationSpeed.getAsDouble());
     }
 }
