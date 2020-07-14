@@ -24,9 +24,9 @@ import frc.robot.subsystems.Intake;
 public class RobotContainer {
   Joystick joystick = new Joystick(0);
   // The robot's subsystems and commands are defined here...
-  Drivetrain drivetrain = new Drivetrain(joystick);
+  Drivetrain drivetrain = new Drivetrain();
   Intake intake = new Intake();
-  JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand(drivetrain);
+  JoystickDriveCommand joystickDriveCommand = new JoystickDriveCommand(drivetrain, joystick);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
