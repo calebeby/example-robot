@@ -46,7 +46,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     drivetrain.setDefaultCommand(new JoystickDriveCommand(drivetrain, () -> joystick.getX(), () -> joystick.getY()));
-    elevator.setDefaultCommand(new JoystickElevatorCommand(elevator, joystick));
+    elevator.setDefaultCommand(new JoystickElevatorCommand(elevator, () -> joystick.getRawAxis(5)));
     hatchIntake.setDefaultCommand(new HoldHatchCommand(hatchIntake));
     ballIntake.setDefaultCommand(new RunCommand(ballIntake::stop, ballIntake));
     arm.setDefaultCommand(new JoystickArmCommand(arm, () -> joystick.getRawAxis(4)));
