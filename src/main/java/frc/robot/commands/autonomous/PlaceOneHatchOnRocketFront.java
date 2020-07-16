@@ -1,6 +1,5 @@
 package frc.robot.commands.autonomous;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveForwardCommand;
 import frc.robot.commands.DriveTurnCommand;
@@ -17,8 +16,8 @@ public class PlaceOneHatchOnRocketFront extends SequentialCommandGroup {
         addRequirements(drivetrain, hatchIntake, elevator, arm);
 
         addCommands(
-            new ParallelCommandGroup(
-                new SequentialCommandGroup( 
+            parallel(
+                sequence( 
                     new DriveForwardCommand(drivetrain, 0.5).withTimeout(0.65),
                     new DriveTurnCommand(drivetrain, 0.7).withTimeout(1.2),
                     new DriveForwardCommand(drivetrain, 0.5).withTimeout(0.85)
