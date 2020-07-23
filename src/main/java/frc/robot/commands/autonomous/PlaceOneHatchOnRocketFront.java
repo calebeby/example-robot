@@ -13,11 +13,9 @@ import frc.robot.subsystems.HatchIntake;
 
 public class PlaceOneHatchOnRocketFront extends SequentialCommandGroup {
     PlaceOneHatchOnRocketFront(Drivetrain drivetrain, HatchIntake hatchIntake, Elevator elevator, Arm arm) {
-        addRequirements(drivetrain, hatchIntake, elevator, arm);
-
         addCommands(
             parallel(
-                sequence( 
+                sequence(
                     new DriveForwardCommand(drivetrain, 0.5).withTimeout(0.65),
                     new DriveTurnCommand(drivetrain, 0.7).withTimeout(1.2),
                     new DriveForwardCommand(drivetrain, 0.5).withTimeout(0.85)
