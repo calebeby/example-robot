@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.EjectHatchCommand;
@@ -73,7 +74,24 @@ public class RobotContainer {
     );
     ejectHatchButton.whileHeld(new EjectHatchCommand(hatchIntake).perpetually());
     
-    intakeBallButton.whileHeld(ballIntake::intake, ballIntake);
+    intakeBallButton.whileHeld(
+      () -> {
+        ballIntake.intake();
+        if (ballIntake.hasBall()) {
+          joystick.setRumble(RumbleType.kRightRumble, 0.5);
+        } else {
+          joystick.setRumble(RumbleType.kRightRumble, 0);
+        }
+      }, 
+      ballIntake
+    );
+
+    intakeBallButton.whenReleased(
+      () -> {
+        joystick.setRumble(RumbleType.kRightRumble, 0);
+      }
+    );
+
     ejectBallButton.whileHeld(ballIntake::outtake, ballIntake);
   }
 }
