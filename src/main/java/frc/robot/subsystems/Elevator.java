@@ -24,6 +24,10 @@ public class Elevator extends SubsystemBase {
         return encoder.getAbsolutePosition();
     }
 
+    public double getVelocity() {
+        return encoder.getVelocity();
+    }
+
     @Override
     public void periodic() {
         motor1.set(speed);
