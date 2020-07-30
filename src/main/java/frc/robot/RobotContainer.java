@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.EjectHatchCommand;
+import frc.robot.commands.ElevatorPositionCommand;
 import frc.robot.commands.HoldHatchCommand;
 import frc.robot.commands.JoystickArmCommand;
 import frc.robot.commands.JoystickDriveCommand;
@@ -64,6 +65,11 @@ public class RobotContainer {
     JoystickButton ejectHatchButton = new JoystickButton(joystick, 1);
     JoystickButton intakeBallButton = new JoystickButton(joystick, 2);
     JoystickButton ejectBallButton = new JoystickButton(joystick, 3);
+    JoystickButton elevatorToTopButton = new JoystickButton(joystick, 4);
+    JoystickButton elevatorToBottomButton = new JoystickButton(joystick, 5);
+
+    elevatorToTopButton.whenPressed(new ElevatorPositionCommand(elevator, 1.1));
+    elevatorToBottomButton.whenPressed(new ElevatorPositionCommand(elevator, 0));
 
     intakeHatchButton.whileHeld(
       () -> {
