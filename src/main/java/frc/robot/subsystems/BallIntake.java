@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -8,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class BallIntake extends SubsystemBase {
     private SpeedController intakeMotor = new VictorSP(5);
     private AnalogInput ballSensor = new AnalogInput(0);
+    private NetworkTableEntry ntEncoderPosition = NetworkTableInstance.getDefault().getEntry("/subsystems/ball_intake/has_ball");
 
     public void intake() {
         intakeMotor.set(1);
@@ -27,5 +30,10 @@ public class BallIntake extends SubsystemBase {
 
     public boolean hasBall() {
         return ballSensor.getVoltage() < 2.0;
+    }
+
+    @Override
+    public void periodic() {
+        ntEncoderPosition.setBoolean(hasBall());
     }
 }
