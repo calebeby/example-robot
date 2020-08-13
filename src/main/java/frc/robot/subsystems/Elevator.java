@@ -43,10 +43,3 @@ public class Elevator extends SubsystemBase {
         speed = 0;
     }
 }
-
-/*
-
-
-/subsystems/elevator/encoder_position
-
-*/

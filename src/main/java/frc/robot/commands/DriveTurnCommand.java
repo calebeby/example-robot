@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -16,6 +17,6 @@ public class DriveTurnCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrain.arcadeDrive(speed, 0);
+        drivetrain.drive(new Translation2d(0, 0), speed, false);
     }
 }
