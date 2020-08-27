@@ -7,12 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.EjectHatchCommand;
 import frc.robot.commands.ElevatorPositionCommand;
 import frc.robot.commands.HoldHatchCommand;
@@ -39,6 +41,8 @@ public class RobotContainer {
   HatchIntake hatchIntake = new HatchIntake();
   BallIntake ballIntake = new BallIntake();
   Arm arm = new Arm();
+  DigitalInput elevatorBottomLimitSwitch = new DigitalInput(0);
+  Trigger elevatorBottomLimitSwitchTrigger = new Trigger(elevatorBottomLimitSwitch::get);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -61,26 +65,31 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton intakeHatchButton = new JoystickButton(joystick, 0);
-    JoystickButton ejectHatchButton = new JoystickButton(joystick, 1);
-    JoystickButton intakeBallButton = new JoystickButton(joystick, 2);
-    JoystickButton ejectBallButton = new JoystickButton(joystick, 3);
-    JoystickButton elevatorToTopButton = new JoystickButton(joystick, 4);
-    JoystickButton elevatorToBottomButton = new JoystickButton(joystick, 5);
+    Trigger intakeHatchButton = new Trigger(() -> joystick.getRawAxis(5) > 0.8);
+    JoystickButton aButton = new JoystickButton(joystick, 0);
+    JoystickButton bButton = new JoystickButton(joystick, 1);
+    JoystickButton xButton = new JoystickButton(joystick, 2);
+    JoystickButton yButton = new JoystickButton(joystick, 3);
+    JoystickButton rightBumperButton = new JoystickButton(joystick, 4);
+    JoystickButton leftBumperButton = new JoystickButton(joystick, 5);
 
-    elevatorToTopButton.whenPressed(new ElevatorPositionCommand(elevator, 1.1));
-    elevatorToBottomButton.whenPressed(new ElevatorPositionCommand(elevator, 0));
+    rightBumperButton.whenPressed(new ElevatorPositionCommand(elevator, 1.1));
+    leftBumperButton.whenPressed(new ElevatorPositionCommand(elevator, 0));
 
-    intakeHatchButton.whileHeld(
+    intakeHatchButton.whileActiveContinuous(
       () -> {
         hatchIntake.openGrabber();
         hatchIntake.retractEjectors();
       },
       hatchIntake
     );
-    ejectHatchButton.whileHeld(new EjectHatchCommand(hatchIntake).perpetually());
-    
-    intakeBallButton.whileHeld(
+    bButton.and(aButton.negate()).whileActiveContinuous(new EjectHatchCommand(hatchIntake).perpetually());
+
+    aButton.and(bButton).whenActive(drivetrain::resetGyro, drivetrain);
+
+    elevatorBottomLimitSwitchTrigger.whenActive(elevator::resetEncoder, elevator);
+
+    xButton.whileHeld(
       () -> {
         ballIntake.intake();
         if (ballIntake.hasBall()) {
@@ -92,12 +101,12 @@ public class RobotContainer {
       ballIntake
     );
 
-    intakeBallButton.whenReleased(
+    xButton.whenReleased(
       () -> {
         joystick.setRumble(RumbleType.kRightRumble, 0);
       }
     );
 
-    ejectBallButton.whileHeld(ballIntake::outtake, ballIntake);
+    yButton.whileHeld(ballIntake::outtake, ballIntake);
   }
 }

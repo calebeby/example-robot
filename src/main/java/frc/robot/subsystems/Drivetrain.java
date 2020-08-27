@@ -54,6 +54,10 @@ public class Drivetrain extends SubsystemBase {
         new Translation2d(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0));
     
     private final Gyroscope gyroscope = new NavX(SPI.Port.kMXP);
+
+    public void resetGyro() {
+        gyroscope.setAdjustmentAngle(gyroscope.getUnadjustedAngle());
+    }
     
     public Drivetrain() {}
 

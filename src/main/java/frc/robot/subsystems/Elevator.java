@@ -16,6 +16,10 @@ public class Elevator extends SubsystemBase {
     private NetworkTableEntry ntEncoderPosition = NetworkTableInstance.getDefault().getEntry("/subsystems/elevator/encoder_position");
     private NetworkTableEntry ntEncoderVelocity = NetworkTableInstance.getDefault().getEntry("/subsystems/elevator/encoder_velocity");
 
+    public void resetEncoder() {
+        encoder.setPosition(0);
+    }
+
     /**
      * Sets the speed (-1 to 1) of the elevator.
      * Negative is down, positive is up
